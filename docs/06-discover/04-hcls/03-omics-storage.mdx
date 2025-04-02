@@ -1,29 +1,90 @@
 ---
 title: Omics Storage
-description: Documentation for amorphic data cloud (ADC) - forgot password
+description: Documentation for Amorphic - HCLS Omics Storage
+tags:
+    - HCLS
+    - Omics Storage
+sidebar_position: 2
 ---
 
+Omics storage enables storing and sharing petabytes of raw genomics data efficiently.
+There are two types of Omics Storage:
+- [Reference Store](#reference-store)
+- [Sequence Store](#sequence-store)
 
-If user forgets the password to the application,
-User can always reset the password using 'Forgot password' link in the
-login page. Click on the 'Forgot password' link in the login page and
-'Forgot Password' page will be opened.
+### Reference Store
+Reference store is used for storing reference genomes. There can only be **one reference store** in a given environment, so users will
+have to share the same reference store. The genomic files must be in *FASTA* format.
 
 
-![Forgot Password](https://media-hub.amorphicdata.io/docs/media/authentication/v2_forgot_password.png)
+### Sequence Store
+Sequence store is used for storing genomic sequences of interest for further analysis.
+There can be any number of sequence stores in a given environment.
+The genomic files can be in *FASTQ* (gzip-only), *BAM*, or *CRAM* formats.
 
-Enter the 'Username' or 'Email ID' associated with the user account and
-click on 'Reset Password' button.
+:::info Note
+To use Omics Storage, HCLS should be enabled in the environment.
+:::
 
-![Enter Username](https://media-hub.amorphicdata.io/docs/media/authentication/v2_add_username.png)
+## How to create an Omics Storage store?
 
-A verification code will be sent to
-the specified email address and 'Reset Password' page will be displayed.
-Enter the 'Verification Code' and the 'New Password/Confirm Password'
-details and click on 'Submit' button.
+1. Click on `+ Create Omics Storage`.
+2. Fill in the required fields (Details listed below).
 
-![Reset Password](https://media-hub.amorphicdata.io/docs/media/authentication/v2_verification_code.png)
+![Create Storage Store](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-storage/omics-storage-create-form.gif)
 
-Password will be successfully changed and the login page will be displayed on clicking continue.
+Following fields are needed to create an Omics Storage store:
 
-![Password Changed](https://media-hub.amorphicdata.io/docs/media/authentication/v2_reset_password.png)
+| Properties | Details |
+|----------|----------|
+| Store Name | A name for the Omics Storage store.|
+| Store Type | Type of Storage store - Omics Reference/Omics Sequence. |
+| Description| Description of the store being created. |
+| Keywords | Keywords indexed & searchable in app. Choose meaningful keywords to flag related stores & easily find them later. |
+
+## How to import data into an Omics Storage store?
+
+Import job is the process of importing genomic data into the Reference/Sequence Store that you created.
+To start an import job you need a dataset which contains your genomic data, and this dataset must be of type **s3** with file type as **others**.
+This is an asynchronous process and will take some time to complete.
+
+### Importing a Reference Genome
+- A Reference Store import job can ingest only 1 file at a time, and the desired file must be specified from the input dataset.
+Successful completion of this job will create a **Reference Genome**, which can be viewed under the Reference Genomes tab.
+Following details are required for a Reference Store import job:
+
+| Properties | Details |
+|----------|----------|
+| Dataset | The dataset containing the desired reference genome file. |
+| Job Name | The name for your import job. |
+| Description| An optional description for the import job. |
+| File Name | The genomic data file that you want to import from the selected dataset. |
+
+Following image depicts how to import a reference genome:
+![Reference Import](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-storage/omics-storage-reference-store-import.gif)
+
+### Importing a Read Set
+- A Sequence Store import job will ingest all files in the input dataset, and it also supports pair ended sequences.
+Each valid sequence in the input dataset will result in an individual read set, provided the sequence is compatible with the specified reference genome.
+Hence, the completion of this job will create **Read Set(s)**, which can be viewed under the Read Sets tab.
+Following details are required for a Sequence Store import job:
+
+| Properties | Details |
+|----------|----------|
+| Dataset | The dataset containing the desired genome files. |
+| Job Name | The name for your import job. |
+| Description| An optional description for the import job. |
+| Readset Name | The desired name for the imported readset.|
+| Reference Store | Specifies the Reference Store.|
+| Reference Genome | The desired valid reference genome for this particular sequence.|
+| Sample Id | The desired sample id for the imported readset.|
+| Subject Id | The desired subject id for the imported readset.|
+
+:::info Note
+For a pair ended sequence, the file names in the input dataset must be of the format fileName_1, fileName_2 indicating that they belong as a pair.
+A single import job can be used to ingest multiple sequences, however the Readset Name, Sample Id and Subject Id will remain the same.
+:::
+
+Following image depicts how to import a sequence:
+![Sequence Import](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-storage/omics-storage-sequence-store-import.gif)
+

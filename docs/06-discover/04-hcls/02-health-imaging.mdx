@@ -1,30 +1,132 @@
 ---
-title: Health Imaging
-description: Documentation for amorphic data cloud (ADC) - user authentication login
+title: HealthImaging
+description: Documentation for Amorphic - HCLS HealthImaging
+tags:
+    - HCLS
+    - HealthImaging
+sidebar_position: 2
 ---
+Amazon HealthImaging is a new HIPAA-eligible capability that makes it easy to store, access, and analyze medical images at petabyte scale.
+In Amorphic, this functionality allows medical images within the Amorphic dataset to be processed through AWS HealthImaging service.
 
-User can login to the application using the username and password specified during the user registration process.
+:::info Note
+To use HealthImaging, HCLS should be enabled in the environment.
+:::
 
-[login](https://media-hub.amorphicdata.io/docs/v2/assets/amorphic_login.png)
+## How to create a HealthImaging store?
 
--   If the user is an existing user then, the user will be taken to the
-    application homepage immediately upon the login.
+1. Choose HCLS from the Discover Menu and select `Health Imaging`
+1. Click on `+ Health Imaging` and select `From Scratch`.
+2. Fill in the required fields (Details listed below).
 
--   If the user is a newly registered user then, the user is required to
-    agree to the 'Terms and Conditions' bound to the Amorphic application.
-    User can move forward into the application only if the user agrees
-    to those 'Terms and Conditions'. Once it is done, User will be
-    provided with a set of credentials which can be used to connect to
-    the Data warehouse (Ex: Redshift, AuroraMySQL). User should save those
-    credentials. If not, the user can always reset the DWH(Datawarehouse)
-    password using the 'Reset Password' button in the
-    [Reset DWH Password](../home/profile-and-settings/other-settings#dwh-password) popup on the Settings Page.
+![Create HealthImaging](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-create.gif)
 
-![User Agreement upon login](https://media-hub.amorphicdata.io/docs/v2/assets/terms_of_use.png)
+Following fields are needed to create a new Imaging Datastore:
+- **StoreName**: The name for the HealthImaging data store.
+- **Description**: A brief description about the HealthImaging data store.
+- **Keywords**: Optional keywords for the HealthImaging data store. This can be used to flag related stores.
+- **Auto Terminate**: This enables Imaging Store termination based on the time value provided by the user.
+- **Auto Terminate Time**: Time at which the system auto terminates the Imaging store.
 
-Once the user is logged into the application. User will be assigned a
-'Default role' which will have very limited access to the application.
-User can always request any Administrator to provide with respective
-role in order to perform multifarious actions and use the Amorphic services as desired.
+After entering the details, click the *Create Health Imaging Store* button to initiate the HealthImaging data store creation.
 
-Once the user gets access to a new role, user can switch from the current role to use any other role. Please refer to the [Switch Role documentation](../management/roles#switch-role)
+## HealthImaging Store details
+
+Once the store creation is triggered, the store details will appear in the page in this format.
+
+![HealthImaging Details](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-details.png)
+
+## How to import data into Health Imaging Datastore?
+
+1. Under the Import Jobs tab, click on the `New Job` button.
+2. In the following form, fill in the required details.
+
+![Import Data into HealthImaging](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-importjob-form.gif)
+
+:::info Note
+ Only files of .dcm format will be imported into HealthImaging Datastore.
+:::
+Steps for creating an import job:
+1. User must first create a dataset in Amorphic with S3 target type and set the file type as 'others'.
+2. Upload the required DICOM file (.dcm format) into that dataset.
+3. Create a job by selecting this dataset name from the drop-down list and initiate the job.
+4. Scheduling functionality also available, allowing execution of import jobs at desired intervals.
+
+Upon successful completion, the user can view the imageset created from those files in the imageset tab.
+This is an asynchronous process and will take a while to complete.
+
+If an import job has either succeeded or failed, user can download the respective success and failure files, along with the manifest file, directly from the Job details tab, as shown below.
+![HealthImaging Job Details](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-importjob-details.gif)
+
+## What are Imagesets?
+
+An imageset is automatically generated upon successful completion of an import job. Users can view the metadata and preview of the imageset, and they also have the ability to edit the imageset metadata.
+For each imageset updation, a new version of the imageset will be created.
+
+However, when a user updates any imageset metadata, that imageset will go into a **LOCKED** state, preventing the user from viewing it.
+After the updation, the user can see the imageset in the list.
+
+When utilizing the AWS HealthImaging service, there are specific **constraints for updating the imageset**.
+Users must refer to the documentation to identify and update the correct fields. If a user attempts to update any non-editable attributes, the imageset update status will be marked as failed.
+
+An example of imageset updating is shown below:
+![HealthImaging imageset update](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-imageset-update.png)
+
+:::info Note
+Imagesets are dependent on datastores. To delete datastore, all associated imagesets must be deleted.
+:::
+
+## How to Search Imagesets
+
+Users can search through imageset metadata with different DICOM attributes.
+It is possible to filter the imagesets with combinations of multiple DICOM attributes.
+This helps the user to list and view only the imagesets they are interested in with.
+
+An example of how to search imagesets is shown below::
+![HealthImaging imageset search](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-imageset-metadata-search.gif)
+
+
+The currently supported DICOM attributes for filtering in each level of imageset are:
+
+```json title="Patient Level"
+PatientName, PatientID,
+IssuerOfPatientID, TypeOfPatientID, PatientBirthDate, PatientSex, EthnicGroup,
+ResponsiblePerson, ResponsiblePersonRole, ResponsibleOrganization, PatientIdentityRemoved,
+ClinicalTrialSponsorName, ClinicalTrialProtocolID, ClinicalTrialProtocolName, ClinicalTrialSiteID, ClinicalTrialSiteName, ClinicalTrialSubjectID, ClinicalTrialSubjectReadingID
+```
+
+```json title="Study Level"
+StudyInstanceUID, StudyDate, StudyTime, StudyID,
+ReferringPhysicianName, AccessionNumber,
+PatientAge, SmokingStatus, PatientState, Occupation, AdmissionID
+```
+
+```json title="Series Level"
+Modality, BodyPartExamined, PatientPosition,
+SeriesInstanceUID, SeriesNumber, Laterality, ProtocolName,
+Manufacturer, InstitutionName, InstitutionalDepartmentName
+```
+
+
+## How to view the medical images in HealthImaging store using image viewer?
+
+Users can view the medical images that are upload to HealthImaging using image preview option.
+
+All imagesets in a HealthImaging store will have a key called `StudyInstanceUID`. Imagessets that are having the same StudyInstanceUID will be grouped together to view the images in the image viewer.
+
+Following are the step to view HealthImaging images in the image viewer:
+1. Select the HealthImaging store from which you want to view the images.
+2. Go to image preview tab and click on the `Connect to Imageviewer` button.
+3. You can optionally click on `Recheck status` button to check the connection status of HealthImaging store with Image viewer.
+
+Below image shows how view medical images in HealthImaging store with image viewer.
+![HealthImaging view medical images](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-view-medical-images.gif)
+
+Users have the option to disconnect HealthImaging store from image viewer if image viewing is no longer required.
+To do that, click on `Disconnect from Imageviewer` from the three dot button on the top right corner of HealthImaging store.
+![Disconnect HealthImaging store from image viewer](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthimaging/healthimaging-diconnect-image-viewer.png)
+
+:::info Note
+Customer first need to set up image viewer inorder to use this feature. Contact Amorphic support setting up image viewer in Amorphic.
+:::
+

@@ -1,29 +1,109 @@
 ---
 title: Omics Analytics
-description: Documentation for amorphic data cloud (ADC) - forgot password
+description: Documentation for Amorphic - HCLS Omics Analytics
+tags:
+    - HCLS
+    - Omics Analytics
+sidebar_position: 3
 ---
 
+Omics Analytics stores provide a centralized repository for genetic and genomic data, making it easier to manage and analyze large volumes of data.
+Analytics stores must be listed as “Active” before they are made ready to ingest data.
+Once the data is ingested, you can also view and query your data in Amorphic Query Engine.
+In Amorphic we have two types of analytics storage.
 
-If user forgets the password to the application,
-User can always reset the password using 'Forgot password' link in the
-login page. Click on the 'Forgot password' link in the login page and
-'Forgot Password' page will be opened.
+- [Variant Store](#variant-store)
+- [Annotation Store](#annotation-store)
 
 
-![Forgot Password](https://media-hub.amorphicdata.io/docs/media/authentication/v2_forgot_password.png)
 
-Enter the 'Username' or 'Email ID' associated with the user account and
-click on 'Reset Password' button.
+### Variant Store
+A Variant store is a data store that stores variant data at a population scale. Variant store helps to collect genomic objects, specifically variant call formats files (VCFs), which function as a genomic file.
+Variant stores support both gVCF and VCF inputs.
 
-![Enter Username](https://media-hub.amorphicdata.io/docs/media/authentication/v2_add_username.png)
 
-A verification code will be sent to
-the specified email address and 'Reset Password' page will be displayed.
-Enter the 'Verification Code' and the 'New Password/Confirm Password'
-details and click on 'Submit' button.
 
-![Reset Password](https://media-hub.amorphicdata.io/docs/media/authentication/v2_verification_code.png)
+### Annotation Store
+An annotation store is a data store that holds annotation data and holds information about variants, genes, or genomic regions of interest.
+Annotation stores support storage of files in TSV/CSV, VCF, and GFF formats.
 
-Password will be successfully changed and the login page will be displayed on clicking continue.
+:::info Note
+To use Omics Analytics, HCLS should be enabled in the environment.
+:::
 
-![Password Changed](https://media-hub.amorphicdata.io/docs/media/authentication/v2_reset_password.png)
+
+
+## How to Create an Analytics Store
+
+You can create new analytics store by clicking **+ Create Omics Analytics** button in Omics Analytics page and filling required information.
+The analytics store creation is an asynchronous process hence you need to wait till the store becomes active before you start importing jobs.
+
+Below image show how to create a new Omics Analytics Store
+![Create Analytics Store](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-analytics/omics-analytics-store-create.gif)
+
+To create a new analytics store, either input the details shown in the table below or directly upload the JSON data.
+
+
+
+### Metadata
+
+| Properties | Details |
+|----------|----------|
+| Store Name | Store name must start with an alphabet and can only contain 3-254 alphanumeric & \_ characters only, and must be unique. |
+| Store Type | Type of analytics store - Omics Variant/Omics Annotation. |
+| Description| Description of the store being created. |
+| Keywords | Keywords indexed & searchable in app. Choose meaningful keywords to flag related stores & easily find them later. |
+
+
+
+### Store Configurations
+
+| Store Configs | Details |
+|----------|----------|
+| Reference Store | **Reference Store** name that you previously created where your reference genome is. |
+| Reference Genome | The genome reference for the store's annotations from list of references in the Reference Store. |
+| Data File Format | The annotation file format of the store. It can be either **VCF**, **GFF** or **TSV**. This option is only for Annotation store. |
+| Schema Definition  | The schema which describes column names and type of your annotation file. The schema must be defined when the **Data File Format** TSV. |
+
+
+
+## Import Jobs
+
+Import job is the process of importing genomic data into Analytics Store that you created for analysis.
+
+To start an import job you need a dataset which contains your genomic data.
+Each store only supports import of data files of format that you chose during the creation of the analytics store.
+
+Omics Variant stores can ingest files in gVCF and VCF formats. Where as Annotation Store support either TSV/CSV, VCF, or GFF files.
+The store must be in **active** state before you can start an import job and all data imported in an Analytics Store must be in the same format.
+
+Below image show how to start and import job
+![Start Import Job](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-analytics/omics-analytics-store-start-import-job.gif)
+
+To start an import job in Analytics Store following details are required
+
+
+
+### Import Job Configurations
+
+| Properties | Details |
+|----------|----------|
+| Dataset Id | The dataset where you genome file that you want to import resides. |
+| Job Name | The name of your import job. |
+| Description| Description of the import job. |
+| File Name | The filename of genome data file that you want to import from the selected dataset. |
+
+Import job is an asynchronous process and once the import of data is completed, you can view and query the data from Amorphic [Query Engine](../../Analytics/query-engine) present under the domain of your Analytics Store name.
+
+
+
+## Delete Analytics store
+
+You can delete an Analytics Store by clicking the 'dustbin' icon in store details page.
+
+Deletion of Analytics Store is an asynchronous process.
+Once you delete an Analytics Store it is a permanent delete operation
+and all the associated domains, datasets and import jobs are deleted along with it.
+
+Below image show how to delete an Analytics Store
+![Delete Analytics Store](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-analytics/omics-analytics-store-delete-store.gif)

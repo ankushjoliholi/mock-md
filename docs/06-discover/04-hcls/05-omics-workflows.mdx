@@ -1,29 +1,84 @@
 ---
 title: Omics Workflows
-description: Documentation for amorphic data cloud (ADC) - forgot password
+description: Documentation for Amorphic - HCLS Omics Workflows
+tags:
+    - HCLS
+    - Omics Workflows
+sidebar_position: 4
 ---
 
+Omics Workflows enables processing genomics data using user defined workflows described in WDL or Nextflow. A single invocation of a workflow is called a run, and a single process within a run is called a task.
+Users have to upload a zip file containing the Workflow definition file(s) and Omics Workflows will automatically provision and scale the underlying infrastructure for running their bioinformatics workflow.
+A workflow can be run on genomics data stored in an Amorphic dataset or in an Omics Sequence store.
 
-If user forgets the password to the application,
-User can always reset the password using 'Forgot password' link in the
-login page. Click on the 'Forgot password' link in the login page and
-'Forgot Password' page will be opened.
+:::info Note
+To use Omics Workflows, HCLS should be enabled in the environment.
+:::
 
 
-![Forgot Password](https://media-hub.amorphicdata.io/docs/media/authentication/v2_forgot_password.png)
 
-Enter the 'Username' or 'Email ID' associated with the user account and
-click on 'Reset Password' button.
+## How to create an Omics Workflow?
 
-![Enter Username](https://media-hub.amorphicdata.io/docs/media/authentication/v2_add_username.png)
+1. Goto Discover -> HCLS and Click on `+ Create Omics Workflow`
+2. Upload a zip file containing the Workflow definition file(s).
+3. Fill in the required fields (Details listed below)
 
-A verification code will be sent to
-the specified email address and 'Reset Password' page will be displayed.
-Enter the 'Verification Code' and the 'New Password/Confirm Password'
-details and click on 'Submit' button.
+| Properties | Details |
+|----------|----------|
+| Workflow Name | A name for the Omics Workflow. Workflow Name should only contain 1-128 alphanumeric, - & \_ characters. |
+| Omics Workflow Engine | The desired workflow definition engine: WDL or Nextflow|
+| Description | Description of the workflow being created. |
+| Entry Point | An optional attribute which specifies which file should be the entry point for workflow execution. |
+| Storage Capacity | Desired storage capacity for the workflow, can be between 1-20,000 GB. |
+| Keywords | Keywords indexed & searchable in app. Choose meaningful keywords to flag related workflows & easily find them later. |
+| Dataset Read/Write Access| Specifies which all datasets the workflow needs Read/Write access to respectively.|
 
-![Reset Password](https://media-hub.amorphicdata.io/docs/media/authentication/v2_verification_code.png)
+:::info Note
+Atmost 1 dataset can be specified for write access. If it is specified, worklow output will be written to this dataset.
+:::
 
-Password will be successfully changed and the login page will be displayed on clicking continue.
+Below image shows how to create a new Omics Workflow:
+![Create Workflow](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-workflows/omics-workflow-create.gif)
 
-![Password Changed](https://media-hub.amorphicdata.io/docs/media/authentication/v2_reset_password.png)
+Once a workflow is created ,the details page will be as shown below:
+![Workflow Details](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-workflows/omics-workflow-details.png)
+
+
+
+## How to run an Omics Workflow
+
+1. Select the Omics Workflow that you want to run and go to `RUNS` tab.
+2. Click on `+ Trigger Run
+3. Fill in the required fields (Details listed below)
+
+| Properties | Details |
+|----------|----------|
+| Run Name | A name for the Omics Workflow Run. Workflow Run Name should only contain 1-128 alphanumeric, \- & \_ characters.|
+| Storage Capacity | Desired storage capacity for the workflow run, can be between 1-20,000 GB. |
+| Log Level | Required log level for the workflow run. Can be any of  **OFF**, **FATAL**, **ERROR** or **ALL**. |
+| Run Parameters | The parameters required to run the workflow. |
+
+Below image show how to start Omics Workflow Run:
+![Start Omics Workflow Run](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-workflows/omics-workflow-start-runs.gif)
+
+Below image show Omics Workflow Runs:
+![Omics Workflow Runs](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-workflows/workflows-runs.png)
+
+:::info Note
+You can cancel a Workflow Run while it is in **Pending**, **Starting** or **Running** state.
+:::
+
+
+
+## How to download Omics Workflow Run logs
+
+1. Click on the Omics Workflow Run you want the logs for.
+2. Click on `Generate Logs` button.
+3. After the successful generation of logs, you can download logs of respective runs by clicking `Download Logs` button.
+
+Below image show how to download Omics Workflow Run Logs:
+![Download Omics Workflow Run Logs](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/omics-workflows/workflows-download-logs.gif)
+
+:::info Note
+You can view details of each tasks of an Omics Workflow Run and download logs of each tasks by going to the `Run Tasks` section of an Omics Workflow Run.
+:::
