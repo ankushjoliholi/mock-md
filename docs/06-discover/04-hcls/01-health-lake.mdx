@@ -1,23 +1,88 @@
 ---
 title: Health Lake
-description: Documentation for amorphic data cloud (ADC) - user registration
+description: Documentation for Amorphic - HCLS Health Lake
+tags:
+    - HCLS
+    - HealthLake
+sidebar_position: 1
 ---
 
-User can register to the Amorphic application using the `Register` link on the top right side of the Login page.
+Amazon Healthlake is a HIPAA-eligible service that can be used to store, transform, query, and analyze large-scale health data.
+This enables health data to be ingested into Amorphic datasets and used for further downstream querying and analysis using the Query Engine.
 
-![User registration](https://media-hub.amorphicdata.io/docs/v2/assets/authentication_register.png)
+:::info Note
+To use Healthlake, HCLS should be enabled in the environment.
+:::
 
-In order to register, user would require below information:
 
-- **Username**: User identification to access the application. Example: johndoe, janedoe etc.
-- **Full Name**: Full name of the user being registered.
-- **Password**: Password to access the application.
-- **Email Address**: Email address to create the user account.
 
-Once the user submits all details, the page will redirected to `Verify Email Address` page and a
-verification code will be sent to the specified email address.
-Enter the provided verification code in the text field and click on `Submit` button.
+## How to create a Healthlake store?
 
-![Email verification](https://media-hub.amorphicdata.io/docs/media/authentication/email_verification.png)
+1. Choose HCLS from the Discover Menu and select `Health Lake`
+2. Click on `+ Create Healthlake` and select `From Scratch`.
+3. Fill in the required fields (Details listed below).
 
-Once the user is successfully registered to the application, page will be redirected to the [Login page](./login).
+![Create Healthlake](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthlake/healthlake-create.gif)
+
+Following fields are needed to create a Healthlake store:
+- **Store Name**: The name for the Healthlake data store.
+- **Description**: A brief description about the Healthlake data store.
+- **Keywords**: Optional keywords for the Healthlake data store. This can be used to flag related stores.
+- **Preload Sample Data**: Enable/disable preloading of sample data.
+- **Auto Terminate**: This enables Healthlake Store termination to save resource costs based on the termination time value provided by the user. Auto termination process is triggered every hour and looks for any Healthlake Store that needs to be notified or deleted and sends an email when one of the below criteria is met. The user will receive a notification email in the following scenarios:
+    -   If the difference between the auto-terminate process trigger run (every whole hour) and the termination time is less than 30 minutes.
+    -   If the auto-termination process was successfully able to delete the Healthlake Store after the termination time.
+    -   If the auto-termination process wasn't able to delete the Healthlake Store due to some fatal errors.
+- **Auto Termination Time**: Time at which the system auto terminates the Healthlake store.
+
+:::info Note
+ - Auto-termination process is scheduled to run every hour on the hour (e.g: 6:00, 7:00, 8:00, 9:00).
+ - User will receive a email notification only when the user is subscribed to alerts.
+ - When the termination time elapses, auto termination process will terminate/delete the Healthlake Store and also deletes all the metadata related to the Healthlake Store and this process cannot be undone.
+:::
+
+After entering the details, click the *Create Health Lake* button to initiate the Healthlake data store creation.
+
+
+
+## Healthlake Store details
+
+Once the store creation is triggered, the store details will appear in the page in this format.
+
+![Healthlake Details](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthlake/healthlake-details.gif)
+
+
+
+## How to import data into Healthlake?
+
+1. Under the Import Jobs tab, click on the `+ New Job` button.
+2. In the following form, fill in the required details.
+
+Following fields are needed to create an import job:
+- **Job Name**: The name for the import job.
+- **Dataset ID**: Choose the dataset which contains the data to import.
+- **Description**: A brief description about the import job.
+
+
+![Import Data into Healthlake](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthlake/healthlake-import-job-form.gif)
+
+:::info Note
+ Only files of ndjson format will be imported into HealthLake.
+:::
+
+This is an asynchronous process and will take a while to complete.
+
+If an import job only succeeds partially, then the failed files as well as the manifest file can be downloaded from the Job details tab, as shown below.
+![Healthlake Job Details](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthlake/healthlake-import-job-details.gif)
+
+
+
+## How to query Healthlake datasets?
+
+1. Go to `Explore > Playground`.
+2. Generate a sample query by specifying the Healthlake Domain and desired dataset.
+
+![Import Data into Healthlake](https://media-hub.amorphicdata.io/docs/v3.0/discover/hcls/healthlake/healthlake-sample-query.gif)
+
+3. Click on the `⚙` icon and change workgroup to *Amazon Athena Engine V3*
+4. Run the desired query.
